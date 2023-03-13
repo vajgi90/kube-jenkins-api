@@ -1,13 +1,19 @@
-FROM python:3.9-alpine
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9
 
-RUN apk update && \
+COPY . /app
+
+EXPOSE 8000
+
+#FROM python:3.9-alpine
+
+#RUN apk update && \
     apk add --no-cache --virtual .build-deps build-base && \
     apk add --no-cache libpq
 
-RUN pip install --upgrade pip
+#RUN pip install --upgrade pip
 
-COPY . .
+#COPY . .
 
-RUN pip install -r requirements.txt
+#RUN pip install -r requirements.txt
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
+#CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
