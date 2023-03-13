@@ -7,13 +7,13 @@ pipeline {
     }
 
     stages {
-    stage('Checkout Source') {
+    stage('Version Check') {
       steps {
-        git 'https://github.com/vajgi90/kube-jenkins-api.git'
+        sh 'docker --version'
       }
     }
 
-    stage('Build image') {
+/*     stage('Build image') {
       steps{
         script {
           dockerImage = docker.build dockerimagename
@@ -32,6 +32,6 @@ pipeline {
           }
         }
       }
-    }
+    } */
     }
 }
