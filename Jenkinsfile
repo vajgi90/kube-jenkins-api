@@ -3,35 +3,38 @@ pipeline {
 
     environment {
     dockerimagename = "vajgi90/kubepy"
-    dockerImage = ""
+    DOCKERHUB_CREDENTIALS = credentials('DOCKERHUBCREDENTIAL')
     }
 
     stages {
+
     stage('Version Check') {
       steps {
         sh 'docker --version'
       }
     }
 
-/*     stage('Build image') {
-      steps{
-        script {
-          dockerImage = docker.build dockerimagename
-        }
+    stage('Build') {
+      steps {
+        sh 'docker build -t $dockerimagename:latest .'
       }
     }
 
-    stage('Pushing Image') {
-      environment {
-               registryCredential = 'DOCKERHUBCREDENTIAL'
-           }
-      steps{
-        script {
-          docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
-            dockerImage.push("latest")
-          }
-        }
+    stage('Login') {
+      steps {
+        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
       }
-    } */
+    }
+
+    stage('Push') {
+      steps {
+        sh 'docker push $dockerimagename:latest'
+      }
+    }    
+    }
+    post {
+        always {
+          sh 'docker logout'
+        }
     }
 }
