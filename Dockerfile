@@ -7,8 +7,8 @@ EXPOSE 8000
 #FROM python:3.9-alpine
 
 #RUN apk update && \
-    apk add --no-cache --virtual .build-deps build-base && \
-    apk add --no-cache libpq
+#    apk add --no-cache --virtual .build-deps build-base && \
+#    apk add --no-cache libpq
 
 #RUN pip install --upgrade pip
 
