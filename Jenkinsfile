@@ -1,22 +1,17 @@
 pipeline {
     agent any 
+    options {
+    buildDiscarder(logRotator(numToKeepStr: '5'))
+    }    
 
     environment {
-    dockerimagename = "vajgi90/kubepy"
     DOCKERHUB_CREDENTIALS = credentials('DOCKERHUBCREDENTIAL')
     }
 
     stages {
-
-    stage('Version Check') {
-      steps {
-        sh 'docker --version'
-      }
-    }
-
     stage('Build') {
       steps {
-        sh 'docker build -t $dockerimagename:latest .'
+        sh 'docker build -t vajgi90/kubepy .'
       }
     }
 
@@ -24,17 +19,17 @@ pipeline {
       steps {
         sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
       }
-    }
+    }        
 
     stage('Push') {
       steps {
-        sh 'docker push $dockerimagename:latest'
+        sh 'docker push vajgi90/kubepy'
       }
-    }    
+    }   
     }
-    post {
-        always {
-          sh 'docker logout'
-        }
+  post {
+    always {
+      sh 'docker logout'
     }
+  }
 }
